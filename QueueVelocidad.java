@@ -28,7 +28,7 @@ public class QueueVelocidad <E>{
     }
 
     public boolean add(E element){
-        if(this.size()>=this.datos.length){
+        if(this.next(this.tail) == this.head){
             throw new IllegalStateException("Cola llena..");
         }
 
@@ -39,7 +39,7 @@ public class QueueVelocidad <E>{
     }
 
     public void enqueue(E element) {
-		if(this.size()>=this.datos.length) {
+		if(this.next(this.tail) == this.head) {
 			throw new IllegalStateException("Cola llena..");
 		}
 		this.datos[this.tail] = element;
@@ -47,7 +47,7 @@ public class QueueVelocidad <E>{
 	}
 	
 	public E dequeue() {
-		if(this.size()<=0) {
+		if(this.head == this.tail) {
 			throw new IllegalStateException("Cola vacia..");
 		}
 		E element = this.datos[this.head];
@@ -85,7 +85,7 @@ public class QueueVelocidad <E>{
     }  
 
     public E remove(){
-        if(this.size()<=0){
+        if(this.head == this.tail){
             throw new IllegalStateException("Cola vacia...");
         }
 
@@ -97,7 +97,7 @@ public class QueueVelocidad <E>{
     }
 
     public E element(){
-        if(this.size()<=0){
+        if(this.head == this.tail){
             throw new IllegalStateException("Cola vacia...");
         }
         return this.datos[this.head];
