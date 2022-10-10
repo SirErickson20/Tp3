@@ -18,10 +18,11 @@ public class QueueVelocidad <E>{
         this.tail=0;
     }
 
+    /*
     public int size(){
         return this.count;
     }
-
+    */
     public boolean isEmpty(){
         return this.head == this.tail;
     }
@@ -53,6 +54,10 @@ public class QueueVelocidad <E>{
 		return element;
 	}
 
+    public E peek(){
+        return this.datos[this.head];
+    }
+
     private int next(int pos){
         if(++pos>=this.datos.length){
             pos=0;
@@ -61,7 +66,7 @@ public class QueueVelocidad <E>{
     }
 
     public boolean offer(E element){
-        if(this.size()>=this.datos.length){
+        if(this.next(this.tail) == this.head){
             return false;
         }
         this.datos[this.tail]=element;
@@ -71,7 +76,7 @@ public class QueueVelocidad <E>{
     }
 
     public E pool(){
-        if(this.size()<=0){
+        if(this.head == this.tail){
             return null;
         }
         E result=this.datos[this.head];
