@@ -23,6 +23,7 @@ public class QueueVelocidad <E>{
         return this.count;
     }
     */
+    
     public boolean isEmpty(){
         return this.head == this.tail;
     }
@@ -54,9 +55,6 @@ public class QueueVelocidad <E>{
 		return element;
 	}
 
-    public E peek(){
-        return this.datos[this.head];
-    }
 
     private int next(int pos){
         if(++pos>=this.datos.length){
