@@ -16,7 +16,6 @@ public class QueueVelocidad <E>{
         this.datos= (E[]) new Object [dimension];;
         this.head=0;
         this.tail=0;
-        this.count=0;
     }
 
     public int size(){
@@ -24,7 +23,7 @@ public class QueueVelocidad <E>{
     }
 
     public boolean isEmpty(){
-        return this.count<=0;
+        return this.head == this.tail;
     }
 
     public boolean add(E element){
@@ -34,7 +33,6 @@ public class QueueVelocidad <E>{
 
         this.datos[this.tail]=element;
         this.tail=this.next(this.tail);
-        ++this.count;
         return true;
     }
 
@@ -68,7 +66,6 @@ public class QueueVelocidad <E>{
         }
         this.datos[this.tail]=element;
         this.tail=this.next(this.tail);
-        ++this.count;
 
         return true;
     }
@@ -79,7 +76,6 @@ public class QueueVelocidad <E>{
         }
         E result=this.datos[this.head];
         this.head=this.next(this.head);
-        --this.count;
 
         return result;
     }  
@@ -91,7 +87,6 @@ public class QueueVelocidad <E>{
 
         E result=this.datos[this.head];
         this.head=this.next(this.head);
-        --this.count;
 
         return result;
     }
