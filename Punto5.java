@@ -1,125 +1,119 @@
-//TODO
-// - añadir validaciones (claves negativas, tamaño de mensaje, osea el tamaño de cola)
-// - preparar menú (ingreso manual y aleatorio)
-// - corregir el tema de que no cifra/descifra bien los caracteres con tilde (á,é,í, etc., los caracteres especiales como @ y los números los cifra y descifra bien)
-
+import java.util.Random;
 import java.util.Scanner;
 
 public class Punto5 {
 
     static Scanner sc = new Scanner(System.in);
+  //Definición de colas Estaticas
+    static QueueEspacio<Integer> clavecola1 = new QueueEspacio<>();
+    static QueueEspacio<Character> mensajecola = new QueueEspacio<>(); 
     public static void main(String[] args){
-
-        //Definición de colas
-        QueueEspacio<Integer> clavecola1 = new QueueEspacio<>();
-        QueueEspacio<Integer> clavecola2 = new QueueEspacio<>();
-        QueueEspacio<Integer> clavecola3 = new QueueEspacio<>();
-        QueueEspacio<Character> mensajecola = new QueueEspacio<>();
-
-        System.out.println("Ingrese las claves de cifrado");
-        clavecola1=definirClave(clavecola1);
-        clavecola2=definirClave(clavecola2);
-        clavecola3=definirClave(clavecola3);
-        mensajecola=ingresarMensaje();
-
-        mensajecola = cifrarMensaje(mensajecola, clavecola1, clavecola2, clavecola3);
-
-        clavecola1.reset();
-        clavecola2.reset();
-        clavecola3.reset();
-
-        System.out.println("Ingrese las claves de descifrado");
-        clavecola1=definirClave(clavecola1);
-        clavecola2=definirClave(clavecola2);
-        clavecola3=definirClave(clavecola3);
-        
-        
-        descifrarMensaje(mensajecola, clavecola1, clavecola2, clavecola3);
+    	tripleDES(); //Aplica el cifrado
+    	String cifrado=mostrarCola(mensajecola);
+    	System.out.println("Mensaje cifrado: "+cifrado);
+    	mensajecola=ingresarMensaje(cifrado);
+    	System.out.print("Presione una tecla para continuar...");
+    	sc.nextLine();
+    	descifrar();
     }
-
-    public static QueueEspacio<Integer> definirClave(QueueEspacio<Integer> cola){
-        System.out.println("Ingrese clave");
-        int resto,invertido=0;
-        int clave=sc.nextInt();
-        while( clave > 0 ) {
-            resto = clave % 10;
-            invertido = invertido * 10 + resto;
-            clave /= 10;
+    //Modulos relacionados al cifrado
+    
+    public static void tripleDES() {
+    	Random random = new Random();
+        int clave=0;
+        int op=Helper.seleccionarOpcion("1) Ingresar manualmente: ", "2) Ingresar Aleatoriamente");
+        if(op==1) {
+        	System.out.println("Ingrese mensaje a cifrar");
+            String mensaje=sc.nextLine();
+        	mensajecola=ingresarMensaje(mensaje);
+        	for(int i=0;i<3;i++) {
+        		clave=Helper.corrector("Ingrese clave: ");
+              	clavecola1=definirClave(clave);
+                mensajecola = aplicarCifrado(clavecola1, mensajecola);
+                clavecola1.reset();
+            }
+     
+        }else {
+        	String mensaje=Helper.palabraRandom();
+        	System.out.println("El mensaje es: "+mensaje);
+        	mensajecola=ingresarMensaje(mensaje);
+        	for(int i=0;i<3;i++) {
+        		clave=random.nextInt(0,mensaje.length()*(10^mensaje.length()));
+              	System.out.println("Clave: "+clave);
+        		clavecola1=definirClave(clave);
+              	mensajecola = aplicarCifrado(clavecola1, mensajecola);
+                clavecola1.reset();
+            }
+        	
         }
-        while(invertido > 0){
-            cola.enqueue(invertido % 10);
-            invertido = invertido / 10;
-        }
-        return cola;
+        
     }
-
-    public static QueueEspacio<Character> ingresarMensaje(){
+    
+    public static QueueEspacio<Character> ingresarMensaje(String mensaje){
         QueueEspacio<Character> mensajecola = new QueueEspacio<>();
-        System.out.println("Ingrese mensaje a cifrar");
-        sc.nextLine();
-        String mensaje=sc.nextLine();
         for (char c: mensaje.toCharArray ()){
             mensajecola.enqueue(c);
         }
         return mensajecola;
     }
 
-    
-    public static QueueEspacio<Character> cifrarMensaje(QueueEspacio<Character> mensaje, QueueEspacio<Integer> clave1, QueueEspacio<Integer> clave2, QueueEspacio<Integer> clave3){
-        QueueEspacio<Character> mensajeCifrado = new QueueEspacio<>();
-
-        mensajeCifrado = aplicarCifrado(clave1, mensaje);    
-        mensajeCifrado = aplicarCifrado(clave2, mensajeCifrado);    
-        mensajeCifrado = aplicarCifrado(clave3, mensajeCifrado);
-
-        return mensajeCifrado;
-    }
-
     public static QueueEspacio<Character> aplicarCifrado(QueueEspacio<Integer> clave, QueueEspacio<Character> mensaje){
         int digito=0;
         Character cifrado;
         QueueEspacio<Character> msjAux = new QueueEspacio<>();
-
-        System.out.println("inicio del cifrado");
         while(!mensaje.isEmpty()){
             digito=clave.dequeue();
-            System.out.println(digito);
             cifrado=(char)((int)mensaje.dequeue()+digito);
             msjAux.enqueue(cifrado);
             clave.enqueue(digito); 
         }
-        System.out.println("fin del cifrado");
         return msjAux;
-
     }
 
-    public static void descifrarMensaje(QueueEspacio<Character> mensaje, QueueEspacio<Integer> clave3, QueueEspacio<Integer> clave2, QueueEspacio<Integer> clave1){
-        QueueEspacio<Character> mensajeDescifrado = new QueueEspacio<>();
-
-        mensajeDescifrado = aplicarDescifrado(clave3, mensaje);    
-        mensajeDescifrado = aplicarDescifrado(clave2, mensajeDescifrado);    
-        mensajeDescifrado = aplicarDescifrado(clave1, mensajeDescifrado);
-
-        while(mensajeDescifrado.isEmpty()!=true){
-            System.out.println(mensajeDescifrado.dequeue());
-        }
-    }
-
+    //Modulos relacionados al descifrado
     public static QueueEspacio<Character> aplicarDescifrado(QueueEspacio<Integer> clave, QueueEspacio<Character> mensaje){
         int digito=0;
         Character cifrado;
-        QueueEspacio<Character> msjAux = new QueueEspacio<>();
-        System.out.println("inicio del descifrado");
+        QueueEspacio<Character> msjAux = new QueueEspacio<>(); 
         while(!mensaje.isEmpty()){
             digito=clave.dequeue();
-            System.out.println(digito);
             cifrado=(char)((int)mensaje.dequeue()-digito);
             msjAux.enqueue(cifrado);
             clave.enqueue(digito); 
         }
-        System.out.println("fin del descifrado");
         return msjAux;
 
+    }
+    public static void descifrar() {
+    	int clave=0;
+    	System.out.println("Inicio del descifrado");
+        for(int i=0;i<3;i++) {
+        	clave=Helper.corrector("Ingrese clave: ");
+        	clavecola1=definirClave(clave);
+            mensajecola = aplicarDescifrado(clavecola1, mensajecola);
+            clavecola1.reset();
+        }
+        String descifrado=mostrarCola(mensajecola);
+    	System.out.println(descifrado);
+    }
+    
+    //Metodos que se aplican tanto como el cifrado como el descifrado
+    public static QueueEspacio<Integer> definirClave(int clave){
+    	QueueEspacio<Integer> cola = new QueueEspacio<>();
+    	String claveCadena=String.valueOf(clave);
+        for(int i=0;i<claveCadena.length();i++) {
+        	int numero = Character.getNumericValue(claveCadena.charAt(i));
+        	cola.enqueue(numero);
+            
+        }
+        return cola;
+    }
+    public static String mostrarCola(QueueEspacio<Character> cola) {
+    	String cifrado="";
+    	while(!cola.isEmpty()) {
+     	   cifrado=cifrado+cola.dequeue();
+        }
+    	return cifrado;
     }
           
 }

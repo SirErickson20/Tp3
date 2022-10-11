@@ -1,6 +1,6 @@
 public class QueueEspacio <E>{
 
-    private final static Integer defaultDimension=10;
+    private final static Integer defaultDimension=100;
 
     private E [] datos;
     private int head;

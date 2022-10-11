@@ -17,6 +17,7 @@ public class Punto3Chino {
         System.out.println(cola2);
         System.out.println(cola3);
     }
+    
     //Genera una palabra ya sea por consola o random
 	public static String generarPalabra(int op) {
 		String palabra;

@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class Helper {
@@ -16,8 +17,8 @@ public class Helper {
 		}
 
 		// VALIDADORES
-		public static int corrector(String mensajeEntrada) {
-			int valorControlar = 0;
+		public static Integer corrector(String mensajeEntrada) {
+			Integer valorControlar = 0;
 			while (true) {
 				try {
 					do {
@@ -31,6 +32,15 @@ public class Helper {
 					System.out.println("¡Solo debe ingresar numeros!");
 				}
 			}
+			
+		}
+		// Genera una palabra random
+		public static String palabraRandom() {
+			Random random = new Random();
+			String palabrasRandom[] = {"Erick","Tu no mete cabra","Neuquen","Ana","Pana","Estructura","Gaspi","Ringcraft","FNE", "A cavar a Caravaca", "Amad a la dama", "Atar a la rata", "Arte para Petra",
+					"Ella te da detalle", "Saca tus butacas", "Se van sus naves", "Yo hago yoga hoy", "Se es o no se es" };
+			return palabrasRandom[random.nextInt(palabrasRandom.length)];
+			
 		}
 		public static int corrector(String mensajeEntrada,String mensajeError) {
 			int valorControlar = 0;
