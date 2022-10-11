@@ -9,7 +9,7 @@ public class Punto1 {
 	public static void main(String[] args) {
 		System.out.println("COLA DE CARACTERES");
 		int tamanio = Helper.corrector("Tamaño de la cola: ");
-		Cola cola = new Cola(tamanio);
+		QueueVelocidad<Character> cola = new QueueVelocidad<>(tamanio);
 		
 		opciones(cola);
 
@@ -17,33 +17,33 @@ public class Punto1 {
 	}
 	
 	// Metodo para encolar Manualmente hasta que la cola este llena (se desperdicia un espacio)
-	public static Cola encolarManualmente(Cola cola) {
+	public static QueueVelocidad<Character> encolarManualmente(QueueVelocidad<Character> cola) {
 		int i = 1;
 		Character character;
-		while(!cola.estaLlena()) {
+		while(!cola.isFull()) {
 			System.out.println("Character " + i + ": ");
 			character = sc.nextLine().charAt(0);
-			cola.encolar(character);
+			cola.enqueue(character);
 			i++;
 		}
 		return cola;
 	}
 	
 	// Metodo para encolar Aleatoriamente hasta que la cola este llena (se desperdicia un espacio)
-	public static Cola encolarAleatoriamente(Cola cola) {
+	public static QueueVelocidad<Character> encolarAleatoriamente(QueueVelocidad<Character> cola) {
 		Random random = new Random();
 		Character [] caracteres = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9'};
 		Character character;
-		while(!cola.estaLlena()) {
+		while(!cola.isFull()) {
 			character = caracteres[random.nextInt(caracteres.length)];
 			System.out.println("Se encolo el character: " + character);
-			cola.encolar(character);
+			cola.enqueue(character);
 		}
 		return cola;
 	}
 
 	// Opciones para que se ejecuten las distintas acciones
-	public static void opciones(Cola cola) {
+	public static void opciones(QueueVelocidad<Character> cola) {
 		Character continuar;
 		int op = 0, eleccion;
 		do {
@@ -58,10 +58,10 @@ public class Punto1 {
 				}
 				break;
 			case 2:
-				System.out.println("Elemento desencolado: " + cola.desencolar());
+				System.out.println("Elemento desencolado: " + cola.dequeue());
 				break;
 			case 3:
-				System.out.println("Proximo elemento a salir: " + cola.peek());
+				System.out.println("Proximo elemento a salir: " + cola.element());
 				break;
 			case 4:
 				System.out.println("Cantidad de elementos: " + cola.cantidad());
