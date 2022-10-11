@@ -42,6 +42,7 @@ public class QueueEspacio <E>{
 		if(this.size()>=this.datos.length) {
 			throw new IllegalStateException("Cola llena..");
 		}
+        this.count++;
 		this.datos[this.tail] = element;
 		this.tail = next(this.tail);
 	}
@@ -52,6 +53,7 @@ public class QueueEspacio <E>{
 		}
 		E element = this.datos[this.head];
 		this.head = next(this.head);
+        this.count--;
 		return element;
 	}
 
@@ -101,6 +103,12 @@ public class QueueEspacio <E>{
             throw new IllegalStateException("Cola vacia...");
         }
         return this.datos[this.head];
+    }
+
+    public void reset(){        
+        this.head=0;
+        this.tail=0;
+        this.count=0;
     }
 
 }
